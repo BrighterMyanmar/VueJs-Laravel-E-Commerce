@@ -7,7 +7,9 @@
           v-for="cat in subcats"
           :key="cat.id"
         >
-          {{ cat.name }}
+          <router-link :to="'/products/pbs/' + cat.id">{{
+            cat.name
+          }}</router-link>
         </li>
       </ul>
     </div>
@@ -18,11 +20,16 @@
         data-bs-ride="carousel"
       >
         <div class="carousel-inner">
-          <div class="carousel-item" 
-          v-for="(cat,index) in cats" :key="cat.id"
-          :class="{active : index === 0}"
+          <div
+            class="carousel-item"
+            v-for="(cat, index) in cats"
+            :key="cat.id"
+            :class="{ active: index === 0 }"
           >
-            <img :src="assetUrl+cat.image" class="d-block w-100" alt="" />
+            <img :src="assetUrl + cat.image" class="d-block w-100" alt="" />
+            <div class="carousel-caption d-none d-md-block">
+              <router-link :to="'/products/pbc/'+cat.id">{{cat.name}}</router-link>
+            </div>
           </div>
         </div>
       </div>
@@ -35,11 +42,11 @@ import mixins from "../mixins/mixins";
 export default {
   mixins: [mixins],
   props: ["cats", "subcats"],
-  data(){
+  data() {
     return {
-      assetUrl : this.$assetUrl
-    }
-  }
+      assetUrl: this.$assetUrl,
+    };
+  },
 };
 </script>
 

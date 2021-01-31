@@ -14,7 +14,10 @@
           <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#">Link</a>
+          <router-link class="nav-link text-white" to="/cart">
+            <i class="material-icons">shopping_cart</i>
+            <span class="cartItems">{{("0"+cartCount).slice(-2)}}</span>
+          </router-link>
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -36,6 +39,19 @@
 
 <script>
 export default {
-    props:['logged']
+    props:['logged','cartCount']
 }
 </script>
+
+<style scoped>
+  .cartItems{
+    font-size: 12px;
+    background:red;
+    padding:5px;
+    border-radius: 50%;
+    position:relative;
+    top:-12px;
+    left:-5px;
+
+  }
+</style>
