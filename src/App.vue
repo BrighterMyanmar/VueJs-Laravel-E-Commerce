@@ -1,5 +1,7 @@
 <template>
-  <Nav :logged="logged" :cartCount="cartCount" />
+  <Nav :logged="logged" :cartCount="cartCount" 
+  @changeloginstatus="loginStatusChange" 
+  />
   <div class="container">
   <router-view :logged="logged" 
   @changeloginstatus="loginStatusChange" 
@@ -21,8 +23,8 @@ export default {
     };
   },
   methods: {
-    loginStatusChange() {
-      this.logged = !this.logged;
+    loginStatusChange(data) {
+      this.logged = data;
     },
     changeProductCount(){
       let data = localStorage.getItem('products');
@@ -31,6 +33,10 @@ export default {
     }
   },
   beforeMount(){
+    let token = localStorage.getItem('token');
+    if(token){
+      this.logged = true;
+    }
     this.changeProductCount();
   }
 };

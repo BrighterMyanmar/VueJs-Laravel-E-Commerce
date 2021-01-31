@@ -11,7 +11,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active text-white" aria-current="page" href="#">Home</a>
+          <router-link class="nav-link active text-white" to="/orders">My Orders</router-link>
         </li>
         <li class="nav-item">
           <router-link class="nav-link text-white" to="/cart">
@@ -24,7 +24,7 @@
             User
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li v-if="logged"><a class="dropdown-item" href="#">Logout</a></li>
+            <li v-if="logged"><button class="dropdown-item" @click="logoutUser">Logout</button></li>
             <li v-if="!logged"><router-link class="dropdown-item" to="/login">Login</router-link></li>
             <li v-if="!logged"><router-link class="dropdown-item" to="/register">Register</router-link></li>
           </ul>
@@ -39,7 +39,13 @@
 
 <script>
 export default {
-    props:['logged','cartCount']
+    props:['logged','cartCount'],
+    methods:{
+      logoutUser(){
+        localStorage.removeItem('token');
+        this.$emit("changeloginstatus",false);
+      }
+    }
 }
 </script>
 

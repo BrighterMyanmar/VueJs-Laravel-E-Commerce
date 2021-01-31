@@ -55,6 +55,25 @@
         </td>
       </tr>
     </tbody>
+    <tbody>
+      <tr>
+        <td colspan="5">
+          <span class="float-end">Grand Total</span>
+        </td>
+        <td colspan="2">{{ grandTotal }}</td>
+      </tr>
+      <tr>
+        <td colspan="5">
+          <span class="float-end">Bill Out</span>
+        </td>
+        <td colspan="2">
+          <button class="btn btn-success btn-sm" @click="checkOut">
+            <i class="material-icons">attach_money</i>
+            <span>Check Out</span>
+          </button>
+        </td>
+      </tr>
+    </tbody>
   </table>
 </template>
 
@@ -64,12 +83,17 @@ export default {
     return {
       products: [],
       assetUrl: this.$assetUrl,
+      grandTotal : 0
     };
   },
   methods: {
     loadAllProduct() {
       let data = localStorage.getItem("products");
       this.products = data ? JSON.parse(data) : [];
+      this.grandTotal = 0;
+      this.products.forEach((product)=>{
+          this.grandTotal += product.count * product.price;
+      })
     },
     changeProductCount(id, count) {
       let data = localStorage.getItem("products");
@@ -97,6 +121,39 @@ export default {
       this.loadAllProduct();
       this.$emit("changeProductCount");
     },
+    async checkOut(){
+        let token = localStorage.getItem('token');
+        if(token){
+            let data = localStorage.getItem("products");
+            let pds = JSON.parse(data);
+            if(pds.length > 0){
+                let proAry = [];
+                pds.forEach((product)=>{
+                    proAry.push({id:product.id,count:product.count});
+                });
+                let sendData = {orders:pds} ;  
+                let response = await fetch(this.$baseUrl+"order", {
+                    method: "post",
+                    headers: { 
+                        "content-type": "application/json",
+                        "Authorization":`Bearer ${token}`
+                    },
+                    body: JSON.stringify(sendData),
+                });
+                let responseData =  await response.json();
+                if(responseData.con){
+                    localStorage.removeItem('products');
+                    this.$emit("changeProductCount");
+                    this.$router.push({name:'Home'});
+                }else{
+                    alert(responseData.msg);
+                }
+            };
+           
+        }else{
+            this.$router.push({name:"Login"});
+        }
+    }
   },
   beforeMount() {
     this.loadAllProduct();

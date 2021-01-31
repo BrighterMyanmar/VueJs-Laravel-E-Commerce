@@ -51,7 +51,7 @@ export default {
       let responseData = await this.sendData(url, this.userCreditial);
       if (responseData.con) {
         localStorage.setItem("token", responseData.data);
-        this.$emit("changeloginstatus");
+        this.$emit("changeloginstatus",true);
         this.$router.push({ name: "Home" });
       } else {
         alert(responseData.msg);
